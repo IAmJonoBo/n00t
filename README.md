@@ -1,6 +1,6 @@
-# n00ton
+# n00t
 
-n00ton is an OSS-first, MCP-centric agent control centre that:
+n00t is an OSS-first, MCP-centric agent control centre that:
 - scans a project for MCP servers, CLIs, OpenAPI/GraphQL specs;
 - normalises them into a capability graph;
 - exposes them to an agent (local or cloud) via a unified host; and
