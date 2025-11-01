@@ -1,0 +1,131 @@
+Let’s make n00ton’s window the tiny cockpit it deserves.
+
+Below is a brief you can drop in as UID-UX-WIDGET-BRIEF.md alongside the repo.
+
+⸻
+
+n00ton Widget / Mini-Applet Interaction Brief
+
+1. Purpose
+
+Deliver a micro, everywhere chat/control window that makes MCP-powered actions feel like “talking to the project”, while keeping operators informed, in control, and entertained. It must:
+	•	show what it can and cannot do (capability transparency),
+	•	show what it’s about to do (pre-action summaries),
+	•	let humans intercept, correct, or annotate (HITL), and
+	•	keep a playful-but-serious tone for technical users.
+
+This is aligned with current conversational UI guidance (progressive disclosure, confirmation, context reminders).  
+
+⸻
+
+2. Core user flows
+	1.	Ask → Plan → Approve → Run → Explain
+	•	User: “n00ton, run the full test suite.”
+	•	Widget shows: “I found 3 ways to do tests: npm run test, pnpm test, MCP: repo-test.”
+	•	User picks or confirms.
+	•	Execution streams logs in-line.
+	•	Post-run summary + “promote to shortcut”.
+	•	This matches HITL guidance on clear handoffs and auditable steps.  
+	2.	Discover → Try → Pin
+	•	Widget shows top 5 discovered capabilities (from capability IR).
+	•	User taps one → prefilled prompt → run.
+	•	User can pin to “Fast lane” bar.
+	3.	Teach → Improve
+	•	When user corrects n00ton (“use the staging CLI, not prod”), widget offers “save as rule for this repo”.
+	•	Corrections are stored as human feedback events for the orchestrator. This is the human-in-the-loop feedback loop.  
+	4.	Deploy MCP at will (guarded)
+	•	If discovery finds a CLI without MCP, widget proposes: “Generate MCP wrapper for billing-cli?”
+	•	Shows security warning (based on MCP security best-practices from June 2025).  
+
+⸻
+
+3. Layout (small window / overlay)
+	•	Header: project name, environment badge (dev/stage/prod), connection state.
+	•	Conversation stream: alternates user ↔ n00ton ↔ system events.
+	•	Inline status chips: “planning”, “requires approval”, “running (12s)”, “done”.
+	•	Bottom bar: input + mode toggles (Chat | Command | Search).
+	•	Right mini-panel (collapsible): “Capabilities” (sorted: recommended, recent, dangerous).
+
+This mirrors trustworthy-AI patterns: visible state, reversible actions, memory control.  
+
+⸻
+
+4. UX principles
+	1.	Explain before you act
+Always show: tool name, args, origin (“from package.json”), estimated impact. Users stay in control. This directly mitigates current MCP risks where tools are too opaque.  
+	2.	Progressive disclosure
+Start with “I can run tests, build, deploy, query APIs.” Expand for full IR. This is standard conversational UI practice.  
+	3.	Structured responses, not walls of text
+Show plans as numbered steps; allow user to edit a step before execution.
+	4.	Always a way to undo or dry-run
+Every destructive action must offer: “Dry-run”, “Run as me”, “Don’t ask again for this tool”.
+	5.	Transparent sources
+When n00ton searches the web or a repo, show sources and timestamps; web search should mention the domain to avoid silent prompt poisoning. (This is SIFT/lateral-reading aligned.)  
+
+⸻
+
+5. Human-in-the-loop (HITL) modes
+	•	Observe (default): n00ton can read capabilities, search, simulate plans — no writes.
+	•	Confirm: n00ton can propose calls; user must OK.
+	•	Trusted: per-capability auto-run, but logs are shown.
+	•	Escalate: user can force human or admin review.
+
+These map directly to 2025 HITL guidance on tiered intervention.  
+
+⸻
+
+6. Gamification & delight (developer-safe)
+
+From studies on gamifying software/dev work, the reliable mechanics are progress, mastery, social proof, and narrative; points-only systems fade.  
+
+In widget form:
+	•	Streaks: “3 successful runs today.”
+	•	Mastery tags: “You’ve configured 4/7 capabilities for this repo.”
+	•	Speed medals: “First-run without edits.” (Local-only, no vanity servers.)
+	•	Narrative tone: n00ton can theme itself to repo name (“Project Atlas ops panel initialised.”)
+
+Keep it opt-in to avoid motivational reactance for senior users.
+
+⸻
+
+7. NLP & prompting layer
+	•	Intent router: classify to (a) repo action, (b) MCP deployment/scaffold, (c) web search, (d) advisory.
+	•	Context injectors: when intent is repo action, auto-inject capability IR subset and last 5 runs.
+	•	Repair prompts: if a tool fails, n00ton suggests: “Tool failed: missing env VAR. Add to MCP server?” — keeps user in-the-loop instead of failing silently.
+	•	Local model option: ship a small on-device model to handle intent + paraphrasing, and fall back to cloud for codegen and scaffolding. This addresses your “offer advice and search” idea without making the widget useless offline.
+
+⸻
+
+8. Safety & deployment rules
+
+Because MCP can now auto-wire and even deploy new servers, enforce:
+	1.	Per-action approval for generated MCP servers (must show code diff).
+	2.	Origin tagging: label tools as “discovered”, “generated”, or “remote”.
+	3.	Identity unification: tie widget sessions to a single identity to avoid the identity-fragmentation issue called out in 2025 MCP sec writeups.  
+	4.	Attack-surface hints: warn when a third-party MCP server uses unsafe shell exec, as seen in the Figma/Framelink RCE case.  
+
+⸻
+
+9. What to actually add to the repo
+
+Create docs/UID-UX-WIDGET-BRIEF.md with the content above, and add a TODO to the Next.js app:
+
+// apps/control-centre/app/chat/page.tsx
+// TODO: implement 4-panel chat layout from docs/UID-UX-WIDGET-BRIEF.md
+// - header with project/env
+// - conversation stream with status chips
+// - capabilities drawer (collapsible)
+// - bottom composer with Chat | Command | Search modes
+
+
+⸻
+
+Provenance block
+
+Data: 2025 conversational UI pattern guides; 2025 HITL design posts and research for agentic systems; 2025 MCP security best practices and June 2025 spec updates; recent MCP vulnerability reports.  
+Methods: synthesis of conversational UX (progressive disclosure, visible state), HITL levels, and gamification elements shown to increase developer engagement.  
+Key results: widget should always pre-announce actions, expose capability origin, offer dry-runs, and log everything; gamification should be progress-based not leaderboard-based.
+Uncertainty: medium — real-world repos will have noisy capabilities; some users will prefer CLI-only view.
+Safer alternative: ship in “Observe” mode only; allow admins to enable MCP generation and web search per repo.
+
+This is the human-friendly layer that will make n00ton feel like a co-pilot, not a gremlin.
