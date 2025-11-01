@@ -1,8 +1,8 @@
 {
-  "name": "n00ton",
+  "name": "n00t",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "pnpm@10.18.2",
+  "packageManager": "pnpm@10.20.0",
   "workspaces": [
     "apps/*",
     "packages/*"
