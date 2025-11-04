@@ -4,7 +4,7 @@
   "capabilities": [
     {
       "id": "workspace.metaCheck",
-      "summary": "Run the full meta-check orchestration across federated repos.",
+      "summary": "Run the full meta-check orchestration (frontiers sanity, schema validation, pip-audit, consistency checks).",
       "entrypoint": "../../scripts/meta-check.sh",
       "inputs": {
         "type": "object",

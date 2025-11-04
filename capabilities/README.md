@@ -2,7 +2,7 @@
 
 `manifest.json` lists the actions that n00t can expose over MCP, CLI, or future orchestration APIs.
 
-- `workspace.metaCheck` → runs `scripts/meta-check.sh` with optional bootstrap toggle.
+- `workspace.metaCheck` → runs `scripts/meta-check.sh` (frontiers sanity, pip-audit, schema validation).
 - `workspace.refresh` → executes `scripts/refresh-workspace.sh` to fast-forward repos.
 - `workspace.release` → writes `1.CEREBRUM-DOCS/releases.yaml` and returns the manifest path.
 - `dependencies.check` → validates canonical toolchains and per-project overrides against Cortex policy.
