@@ -6,5 +6,10 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "lint": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present lint",
+    "test": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present test",
+    "build": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present build"
+  }
 }
