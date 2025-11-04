@@ -12,3 +12,7 @@ n00ton is an OSS-first, MCP-centric agent control centre for the entire n00tropi
 With the introduction of `n00-school/`, n00ton will also trigger training runs, simulations, and regression suites against freshly fine-tuned models.
 
 > Status: starter pack scaffold. Flesh out adapters and orchestration hooks before promoting to production.
+
+## Capability Manifest
+
+Automation actions are declared in [`capabilities/manifest.json`](capabilities/manifest.json). The manifest powers MCP resources, CLI wrappers, and any future orchestration APIs.

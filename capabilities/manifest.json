@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "workspace.metaCheck",
+      "summary": "Run the full meta-check orchestration across federated repos.",
+      "entrypoint": "../../scripts/meta-check.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "skipBootstrap": {
+            "type": "boolean",
+            "description": "Skip hermetic runtime bootstrap."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "logPath": {
+            "type": "string"
+          }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "workspace.refresh",
+      "summary": "Fast-forward all workspace repositories and update submodules.",
+      "entrypoint": "../../scripts/refresh-workspace.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "workspace.release",
+      "summary": "Generate release manifest for the federated workspace.",
+      "entrypoint": "../../scripts/workspace-release.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Optional version string inserted into releases.yaml."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "manifest": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "dependencies.check",
+      "summary": "Run canonical + override dependency consistency checks.",
+      "entrypoint": "../../scripts/check-cross-repo-consistency.py",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "school.trainingRun",
+      "summary": "Trigger a model training or evaluation run managed by n00-school.",
+      "entrypoint": "../n00-school/scripts/run-training.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "pipeline": {
+            "type": "string",
+            "description": "Pipeline name defined in n00-school/pipelines."
+          },
+          "dataset": {
+            "type": "string",
+            "description": "Dataset identifier for the run."
+          }
+        },
+        "required": ["pipeline"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifact": {
+            "type": "string",
+            "description": "Path to generated model artefact metadata."
+          }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    }
+  ]
+}
