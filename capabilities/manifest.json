@@ -5,7 +5,7 @@
     {
       "id": "workspace.metaCheck",
       "summary": "Run the full meta-check orchestration (frontiers sanity, schema validation, pip-audit, consistency checks).",
-      "entrypoint": "../../scripts/meta-check.sh",
+  "entrypoint": "../../workspace/automation/scripts/meta-check.sh",
       "inputs": {
         "type": "object",
         "properties": {
@@ -33,7 +33,7 @@
     {
       "id": "workspace.refresh",
       "summary": "Fast-forward all workspace repositories and update submodules.",
-      "entrypoint": "../../scripts/refresh-workspace.sh",
+  "entrypoint": "../../workspace/automation/scripts/refresh-workspace.sh",
       "inputs": { "type": "object", "additionalProperties": false },
       "outputs": {
         "type": "object",
@@ -47,7 +47,7 @@
     {
       "id": "workspace.release",
       "summary": "Generate release manifest for the federated workspace.",
-      "entrypoint": "../../scripts/workspace-release.sh",
+  "entrypoint": "../../workspace/automation/scripts/workspace-release.sh",
       "inputs": {
         "type": "object",
         "properties": {
@@ -71,7 +71,7 @@
     {
       "id": "dependencies.check",
       "summary": "Run canonical + override dependency consistency checks.",
-      "entrypoint": "../../scripts/check-cross-repo-consistency.py",
+  "entrypoint": "../../workspace/automation/scripts/check-cross-repo-consistency.py",
       "inputs": { "type": "object", "additionalProperties": false },
       "outputs": {
         "type": "object",
@@ -85,7 +85,7 @@
     {
       "id": "dependencies.dashboard",
       "summary": "Generate a Renovate dependency dashboard snapshot for the workspace.",
-      "entrypoint": "../../scripts/generate-renovate-dashboard.py",
+  "entrypoint": "../../workspace/automation/scripts/generate-renovate-dashboard.py",
       "inputs": {
         "type": "object",
         "properties": {
