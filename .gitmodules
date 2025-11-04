@@ -1,0 +1,4 @@
+[submodule "n00t-widget-mcp-enab"]
+	path = n00t-widget-mcp-enab
+	url = https://github.com/IAmJonoBo/n00t-widget-mcp-enab.git
+	branch = main
