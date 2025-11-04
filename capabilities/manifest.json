@@ -83,6 +83,39 @@
       }
     },
     {
+      "id": "dependencies.dashboard",
+      "summary": "Generate a Renovate dependency dashboard snapshot for the workspace.",
+      "entrypoint": "../../scripts/generate-renovate-dashboard.py",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "repos": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional list of repository directories to scan."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Override GitHub owner when remotes cannot be inferred."
+          },
+          "output": {
+            "type": "string",
+            "description": "Override path for the generated dashboard JSON."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "path": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
       "id": "school.trainingRun",
       "summary": "Trigger a model training or evaluation run managed by n00-school.",
       "entrypoint": "../n00-school/scripts/run-training.sh",
