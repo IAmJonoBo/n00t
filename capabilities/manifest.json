@@ -146,6 +146,95 @@
         "required": ["status"],
         "additionalProperties": false
       }
+    },
+    {
+      "id": "ai.workflow.planning",
+      "summary": "Run the planning and research phase of the AI-assisted development workflow.",
+      "entrypoint": "../../workspace/automation/scripts/ai-workflows/planning-research.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifacts": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "ai.workflow.architecture",
+      "summary": "Run the architecture and design phase of the AI-assisted development workflow.",
+      "entrypoint": "../../workspace/automation/scripts/ai-workflows/architecture-design.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifacts": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "ai.workflow.coding",
+      "summary": "Run the core coding and implementation phase of the AI-assisted development workflow.",
+      "entrypoint": "../../workspace/automation/scripts/ai-workflows/core-coding.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifacts": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "ai.workflow.debugging",
+      "summary": "Run the debugging and testing phase of the AI-assisted development workflow.",
+      "entrypoint": "../../workspace/automation/scripts/ai-workflows/debugging-testing.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifacts": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "ai.workflow.review",
+      "summary": "Run the review and deployment phase of the AI-assisted development workflow.",
+      "entrypoint": "../../workspace/automation/scripts/ai-workflows/review-deployment.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifacts": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "id": "ai.workflow.runner",
+      "summary": "Interactive runner for the complete AI-assisted development workflow.",
+      "entrypoint": "../../workspace/automation/scripts/ai-workflows/ai-workflow-runner.sh",
+      "inputs": { "type": "object", "additionalProperties": false },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      }
     }
   ]
 }
