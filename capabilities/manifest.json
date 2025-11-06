@@ -497,6 +497,234 @@
         "required": ["status"],
         "additionalProperties": false
       }
+    },
+    {
+      "id": "project.capture",
+      "summary": "Validate metadata-bearing artefacts and register them in the unified project catalog.",
+      "entrypoint": "../../../.dev/automation/scripts/project-capture.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Relative or absolute path to the metadata-bearing Markdown document."
+          },
+          "registry": {
+            "type": "string",
+            "description": "Optional override for the catalog registry path."
+          }
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "metadataPath": {
+            "type": "string"
+          },
+          "registryPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "drift": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/1. Cerebrum Docs/ADR/ADR-004-unified-project-management-system.md"
+      }
+    },
+    {
+      "id": "project.sync.github",
+      "summary": "Plan GitHub project synchronisation using the unified metadata registry.",
+      "entrypoint": "../../../.dev/automation/scripts/project-sync-github.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to the metadata-bearing Markdown document."
+          },
+          "registry": {
+            "type": "string",
+            "description": "Optional registry file override."
+          }
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "metadataPath": {
+            "type": "string"
+          },
+          "registryPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "drift": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "github"],
+        "docs": "../../../n00tropic-cerebrum/1. Cerebrum Docs/ADR/ADR-004-unified-project-management-system.md"
+      }
+    },
+    {
+      "id": "project.sync.erpnext",
+      "summary": "Plan ERPNext project synchronisation using the unified metadata registry.",
+      "entrypoint": "../../../.dev/automation/scripts/project-sync-erpnext.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to the metadata-bearing Markdown document."
+          },
+          "registry": {
+            "type": "string",
+            "description": "Optional registry file override."
+          }
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "metadataPath": {
+            "type": "string"
+          },
+          "registryPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "drift": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "erpnext"],
+        "docs": "../../../n00tropic-cerebrum/1. Cerebrum Docs/ADR/ADR-004-unified-project-management-system.md"
+      }
     }
   ]
 }
