@@ -11,6 +11,24 @@ n00t is an OSS-first, MCP-centric agent control centre for the entire n00tropic 
 
 With the introduction of `n00-school/`, n00t will also trigger training runs, simulations, and regression suites against freshly fine-tuned models.
 
+## Developer workflow
+
+```bash
+pnpm install
+pnpm test        # Executes workspace tests and Vitest suites
+```
+
+`pnpm test` now exercises:
+
+- workspace-local `test` scripts (if defined);
+- the shared Vitest harness (see `tests/` and `vitest.config.ts`) covering capability-manifest helpers and discovery logic.
+
+When working on AI/ML automation, the `school.trainingRun` capability can be invoked directly:
+
+```bash
+pnpm exec ../n00-school/scripts/run-training.sh default --dataset horizons-sample
+```
+
 > Status: starter pack scaffold. Flesh out adapters and orchestration hooks before promoting to production.
 
 ## Capability Manifest

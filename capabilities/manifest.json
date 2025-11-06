@@ -26,7 +26,9 @@
             "type": "string"
           }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -39,12 +41,16 @@
         "properties": {
           "repos": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Optional subset of repositories to upgrade. Defaults to auto-discovered set when omitted."
           },
           "flags": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Extra flags appended to the trunk upgrade invocation."
           }
         },
@@ -53,9 +59,13 @@
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" }
+          "status": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -63,13 +73,20 @@
       "id": "workspace.trunkUpgrade",
       "summary": "Run trunk upgrade across all repositories that declare Trunk configuration.",
       "entrypoint": "../../.dev/automation/scripts/trunk-upgrade.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" }
+          "status": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -90,10 +107,16 @@
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "manifest": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "manifest": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -101,13 +124,20 @@
       "id": "dependencies.check",
       "summary": "Run canonical + override dependency consistency checks.",
       "entrypoint": "../../.dev/automation/scripts/check-cross-repo-consistency.py",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" }
+          "status": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -120,7 +150,9 @@
         "properties": {
           "repos": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Optional list of repository directories to scan."
           },
           "owner": {
@@ -137,10 +169,16 @@
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "path": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -161,15 +199,19 @@
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" }
+          "status": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
     {
       "id": "school.trainingRun",
-      "summary": "Trigger a model training or evaluation run managed by n00-school.",
+      "summary": "Trigger a model training or evaluation run managed by n00-school (validators + artefacts).",
       "entrypoint": "../n00-school/scripts/run-training.sh",
       "inputs": {
         "type": "object",
@@ -180,22 +222,40 @@
           },
           "dataset": {
             "type": "string",
-            "description": "Dataset identifier for the run."
+            "description": "Dataset identifier for the run (defaults to pipeline parameter)."
+          },
+          "check": {
+            "type": "boolean",
+            "description": "When true, validate the pipeline without executing handlers."
+          },
+          "output": {
+            "type": "string",
+            "description": "Optional absolute path to write orchestrator metadata JSON."
           }
         },
-        "required": ["pipeline"],
+        "required": [
+          "pipeline"
+        ],
         "additionalProperties": false
       },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "artifact": {
+          "status": {
+            "type": "string"
+          },
+          "runDir": {
             "type": "string",
-            "description": "Path to generated model artefact metadata."
+            "description": "Directory containing run artefacts (metrics, checkpoints)."
+          },
+          "metadataPath": {
+            "type": "string",
+            "description": "Path to metadata.json generated by pipeline runner."
           }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -203,14 +263,23 @@
       "id": "ai.workflow.planning",
       "summary": "Run the planning and research phase of the AI-assisted development workflow.",
       "entrypoint": "../../.dev/automation/scripts/ai-workflows/planning-research.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "artifacts": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -218,14 +287,23 @@
       "id": "ai.workflow.architecture",
       "summary": "Run the architecture and design phase of the AI-assisted development workflow.",
       "entrypoint": "../../.dev/automation/scripts/ai-workflows/architecture-design.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "artifacts": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -233,14 +311,23 @@
       "id": "ai.workflow.coding",
       "summary": "Run the core coding and implementation phase of the AI-assisted development workflow.",
       "entrypoint": "../../.dev/automation/scripts/ai-workflows/core-coding.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "artifacts": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -248,14 +335,23 @@
       "id": "ai.workflow.debugging",
       "summary": "Run the debugging and testing phase of the AI-assisted development workflow.",
       "entrypoint": "../../.dev/automation/scripts/ai-workflows/debugging-testing.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "artifacts": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -263,14 +359,23 @@
       "id": "ai.workflow.review",
       "summary": "Run the review and deployment phase of the AI-assisted development workflow.",
       "entrypoint": "../../.dev/automation/scripts/ai-workflows/review-deployment.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "artifacts": { "type": "string" }
+          "status": {
+            "type": "string"
+          },
+          "artifacts": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     },
@@ -278,13 +383,20 @@
       "id": "ai.workflow.runner",
       "summary": "Interactive runner for the complete AI-assisted development workflow.",
       "entrypoint": "../../.dev/automation/scripts/ai-workflows/ai-workflow-runner.sh",
-      "inputs": { "type": "object", "additionalProperties": false },
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
       "outputs": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" }
+          "status": {
+            "type": "string"
+          }
         },
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "additionalProperties": false
       }
     }

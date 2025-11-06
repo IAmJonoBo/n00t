@@ -9,6 +9,6 @@
 - `dependencies.check` → executes `.dev/automation/scripts/check-cross-repo-consistency.py` to validate canonical toolchains and per-project overrides against Cortex policy.
 - `dependencies.dashboard` → builds the Renovate dependency snapshot via `.dev/automation/scripts/generate-renovate-dashboard.py`.
 - `cortex.frontiersIngest` → triggers `.dev/automation/scripts/ingest-frontiers.sh` (or `--check`) to push n00-frontiers exports into n00-cortex.
-- `school.trainingRun` → shells into `n00-school/scripts/run-training.sh` to launch model jobs.
+- `school.trainingRun` → shells into `n00-school/scripts/run-training.sh` to validate or execute training pipelines (emits run directory + metadata path).
 
 Agents should inspect this manifest to discover available automation, required inputs, and expected outputs.

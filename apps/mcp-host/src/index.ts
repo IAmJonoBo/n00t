@@ -34,6 +34,8 @@ interface ActiveRun {
   check: boolean;
   status?: AgentRunStatus;
   completed: boolean;
+  outputPath?: string;
+  metadataPayload?: Record<string, unknown>;
 }
 
 interface OutboundMessage {
@@ -188,6 +190,7 @@ function summariseRun(
   run: ActiveRun,
   status: AgentRunStatus,
   exitCode?: number | null,
+  trainingMetadata?: Record<string, unknown> | null,
 ): { summary: string; metadata: Record<string, unknown> } {
   const stdoutTail = tailText(run.stdoutChunks);
   const stderrTail = tailText(run.stderrChunks);
@@ -195,12 +198,28 @@ function summariseRun(
     stdoutTail,
     stderrTail,
     exitCode,
+    trainingMetadata,
   };
   let summary: string;
+  const metrics =
+    trainingMetadata && typeof trainingMetadata === "object" && "metrics" in trainingMetadata
+      ? (trainingMetadata as { metrics?: unknown }).metrics
+      : undefined;
+  let accuracy: number | undefined;
+  if (metrics && typeof metrics === "object" && metrics !== null && "accuracy" in metrics) {
+    const value = (metrics as Record<string, unknown>).accuracy;
+    if (typeof value === "number") {
+      accuracy = value;
+    }
+  }
   if (status === "succeeded") {
-    summary = stdoutTail
-      ? `Manual run succeeded: ${stdoutTail.slice(0, 160)}`
-      : "Manual run succeeded.";
+    if (typeof accuracy === "number") {
+      summary = `Training succeeded (accuracy ${accuracy}).`;
+    } else if (stdoutTail) {
+      summary = `Manual run succeeded: ${stdoutTail.slice(0, 160)}`;
+    } else {
+      summary = "Manual run succeeded.";
+    }
   } else if (status === "cancelled") {
     summary = "Manual run cancelled via MCP host.";
   } else if (stderrTail) {
@@ -211,6 +230,57 @@ function summariseRun(
     summary = `Manual run ended with exit code ${exitCode}.`;
   }
   return { summary, metadata };
+}
+
+function readJsonIfExists(filePath: string): Record<string, unknown> | null {
+  try {
+    if (!fs.existsSync(filePath)) {
+      return null;
+    }
+    const raw = fs.readFileSync(filePath, "utf-8");
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch (error) {
+    console.warn(`[n00ton:mcp-host] unable to read JSON file ${filePath}:`, error);
+    return null;
+  }
+}
+
+function collectTrainingMetadata(activeRun: ActiveRun): Record<string, unknown> | null {
+  const outputPath = activeRun.outputPath;
+  const collected: Record<string, unknown> = {};
+
+  if (outputPath) {
+    const payload = readJsonIfExists(outputPath);
+    if (payload) {
+      collected.output = payload;
+      if (typeof payload.run_dir === "string") {
+        collected.runDir = payload.run_dir;
+      }
+      if (typeof payload.metadata_path === "string") {
+        collected.metadataPath = payload.metadata_path;
+        const pipelineMetadata = readJsonIfExists(payload.metadata_path);
+        if (pipelineMetadata) {
+          collected.pipeline = pipelineMetadata;
+          const stagesValue = (pipelineMetadata as { stages?: unknown }).stages;
+          const stages = Array.isArray(stagesValue)
+            ? (stagesValue as Array<Record<string, unknown>>)
+            : [];
+          const evaluationStage = stages.find((stage) => {
+            const name = (stage as Record<string, unknown>).name;
+            return typeof name === "string" && name === "evaluate-model";
+          });
+          if (evaluationStage) {
+            const stageMetrics = evaluationStage.metrics;
+            if (stageMetrics && typeof stageMetrics === "object") {
+              collected.metrics = stageMetrics as Record<string, unknown>;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return Object.keys(collected).length > 0 ? collected : null;
 }
 
 function safeSend(ws: WebSocket, payload: OutboundMessage) {
@@ -298,6 +368,17 @@ function handleRunRequest(
   if (capability.supportsCheck) {
     payload.check = Boolean(check);
   }
+  const artifactsRoot = path.join(
+    workspaceRoot,
+    ".dev/automation/artifacts/training",
+  );
+  fs.mkdirSync(artifactsRoot, { recursive: true });
+  const timestampLabel = new Date().toISOString().replace(/[:.]/g, "-");
+  const outputPath = path.join(
+    artifactsRoot,
+    `${capabilityId.replace(/\./g, "-")}-${timestampLabel}.json`,
+  );
+  payload.output = outputPath;
   if (Object.keys(payload).length > 0) {
     env.CAPABILITY_PAYLOAD = JSON.stringify(payload);
   }
@@ -323,6 +404,7 @@ function handleRunRequest(
     started: new Date(),
     check: Boolean(check),
     completed: false,
+    outputPath,
   };
 
   state.runs.set(runId, activeRun);
@@ -355,10 +437,15 @@ function handleRunRequest(
   child.on("error", (error) => {
     console.error("[n00ton:mcp-host] failed to spawn capability", error);
     if (!activeRun.completed) {
-      const { summary, metadata } = summariseRun(activeRun, "failed", null);
+      const trainingMetadata = collectTrainingMetadata(activeRun) ?? activeRun.metadataPayload ?? null;
+      if (trainingMetadata) {
+        activeRun.metadataPayload = trainingMetadata;
+      }
+      const { summary, metadata } = summariseRun(activeRun, "failed", null, trainingMetadata ?? undefined);
       recordAgentRunCompletion(activeRun, "failed", summary, {
         ...metadata,
         error: String(error),
+        outputPath: activeRun.outputPath,
       });
       state.runs.delete(runId);
       safeSend(ws, {
@@ -385,8 +472,15 @@ function handleRunRequest(
     }
     const agentStatus: AgentRunStatus =
       code === 0 ? "succeeded" : "failed";
-    const { summary, metadata } = summariseRun(activeRun, agentStatus, code);
-    recordAgentRunCompletion(activeRun, agentStatus, summary, metadata);
+    const trainingMetadata = collectTrainingMetadata(activeRun) ?? activeRun.metadataPayload ?? null;
+    if (trainingMetadata) {
+      activeRun.metadataPayload = trainingMetadata;
+    }
+    const { summary, metadata } = summariseRun(activeRun, agentStatus, code, trainingMetadata ?? undefined);
+    recordAgentRunCompletion(activeRun, agentStatus, summary, {
+      ...metadata,
+      outputPath: activeRun.outputPath,
+    });
     safeSend(ws, {
       type: "execution-complete",
       capabilityId,
@@ -440,8 +534,12 @@ function handleCancelRequest(
 
   activeRun.child.kill();
   state.runs.delete(activeRun.id);
-  const { summary, metadata } = summariseRun(activeRun, "cancelled", null);
-  recordAgentRunCompletion(activeRun, "cancelled", summary, metadata);
+  const trainingMetadata = activeRun.metadataPayload ?? collectTrainingMetadata(activeRun);
+  const { summary, metadata } = summariseRun(activeRun, "cancelled", null, trainingMetadata ?? undefined);
+  recordAgentRunCompletion(activeRun, "cancelled", summary, {
+    ...metadata,
+    outputPath: activeRun.outputPath,
+  });
   safeSend(ws, {
     type: "execution-complete",
     capabilityId: activeRun.capability.id,
