@@ -1,10 +1,25 @@
+import { N00tonControlCentre } from "@n00t/ui";
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8">
-      <h1 className="text-3xl font-bold mb-4">n00ton Control Centre</h1>
-      <p className="text-muted-foreground max-w-2xl text-center">
-        This is the web UI shell. The MCP host service will stream discovered capabilities here.
-      </p>
+    <main
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "stretch",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #eef2ff 0%, #f8fafc 60%, #e0f2fe 100%)",
+        padding: "32px",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "1280px",
+        }}
+      >
+        <N00tonControlCentre />
+      </div>
     </main>
   );
 }

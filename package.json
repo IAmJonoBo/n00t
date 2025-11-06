@@ -11,5 +11,13 @@
     "lint": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present lint",
     "test": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present test",
     "build": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "typescript": "^5.9.3"
   }
 }

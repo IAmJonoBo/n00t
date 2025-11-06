@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["node", "react", "react-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@n00t/capability-ir": ["packages/capability-ir/index.ts"],
+      "@n00t/discovery": ["packages/discovery/src/index.ts"],
+      "@n00t/ui": ["packages/ui/index.tsx"]
+    }
+  }
+}
