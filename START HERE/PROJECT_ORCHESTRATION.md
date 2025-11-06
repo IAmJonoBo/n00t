@@ -73,6 +73,11 @@ The execution writes JSON artefacts to `.dev/automation/artifacts/project-sync/`
 
 > Tip: Integrate these steps into commit hooks or CI to prevent drift entering main branches.
 
+> Script shortcuts:
+>
+> - `.dev/automation/scripts/github-project-apply-blueprint.sh` wraps `gh project create --copy-file` with required flags (`--title`, `--owner`), avoiding the “required flag(s) 'title' not set” error. The script prints the resulting project URL for metadata updates.
+> - All scripts accept absolute or workspace-relative paths so cloud agents can execute them without extra setup.
+
 ---
 
 ## 4. GitHub Project & ERPNext Blueprint Alignment
@@ -86,6 +91,8 @@ gh project create --copy-file blueprints/github-project-template.json \
   --owner {{ cookiecutter.github_org }} \
   --title "Unified PM – {{ cookiecutter.project_name }}"
 ```
+
+> Use `.dev/automation/scripts/github-project-apply-blueprint.sh --owner {{ cookiecutter.github_org }} --title "Unified PM – {{ cookiecutter.project_name }}" --blueprint blueprints/github-project-template.json` to automate the command and guarantee required flags are supplied.
 
 The blueprint defines:
 
