@@ -100,6 +100,8 @@ The blueprint defines:
 - Custom fields: Priority, Target Iteration, Lifecycle Stage
 - Auto-add rules for issues labelled `task`, `from:todo`, `from:tasklist`
 
+Use `.dev/automation/scripts/github-project-apply-blueprint.sh --owner {{ cookiecutter.github_org }} --title "Unified PM – {{ cookiecutter.project_name }}" --template-number <project_number>` (or pass a blueprint JSON that encodes `template_project_number`) to wrap `gh project copy` with the required `--title` flag and avoid the CLI error.
+
 Update the generated `github_project` metadata with the resulting board URL.
 
 ### ERPNext Blueprint
@@ -109,6 +111,8 @@ Update the generated `github_project` metadata with the resulting board URL.
 - Project Code (`PM-UNIFIED` by default), default task groups, SLA targets, and tag mapping.
 - Import into ERPNext via the Workspaces > Projects > Import blueprint flow.
 - Once created, set `erpnext_project` in the metadata to the new code so `project.sync.erpnext` can confirm alignment.
+
+Automate the import by running `.dev/automation/scripts/erpnext-import-blueprint.sh --instance https://erpnext.example.com --site ops.n00tropic.local --blueprint blueprints/erpnext-project-blueprint.yaml` (requires `ERPNEXT_API_KEY`/`ERPNEXT_API_SECRET` or `ERPNEXT_BEARER_TOKEN`).
 
 ---
 
