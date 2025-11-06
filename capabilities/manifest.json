@@ -725,6 +725,207 @@
         "tags": ["project-management", "automation", "erpnext"],
         "docs": "../../../n00tropic-cerebrum/1. Cerebrum Docs/ADR/ADR-004-unified-project-management-system.md"
       }
+    },
+    {
+      "id": "project.recordIdea",
+      "summary": "Scaffold a new idea with metadata, register it, and surface automation impacts.",
+      "entrypoint": "../../../.dev/automation/scripts/project-record-idea.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Idea title or shorthand."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Primary owner handle."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional taxonomy aligned tags."
+          },
+          "sponsors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Stakeholder teams or approvers."
+          },
+          "source": {
+            "type": "string",
+            "description": "Context for idea capture."
+          },
+          "reviewDays": {
+            "type": "integer",
+            "description": "Review window in days (default 30)."
+          }
+        },
+        "required": ["title", "owner"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "metadataPath": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "registryPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00t/START HERE/PROJECT_ORCHESTRATION.md"
+      }
+    },
+    {
+      "id": "project.ingestMarkdown",
+      "summary": "Attach metadata to existing markdown documents and register them in the catalog.",
+      "entrypoint": "../../../.dev/automation/scripts/project-ingest-markdown.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Markdown document path."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["idea", "project", "learn", "issue"],
+            "description": "Classification used to derive defaults."
+          },
+          "owner": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "lifecycle": {
+            "type": "string"
+          },
+          "reviewDays": {
+            "type": "integer",
+            "description": "Review window in days for default review_date."
+          },
+          "id": {
+            "type": "string",
+            "description": "Override metadata identifier."
+          },
+          "sponsors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "type": "string"
+          },
+          "erpnextProject": {
+            "type": "string"
+          },
+          "githubProject": {
+            "type": "string"
+          }
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "metadataPath": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "registryPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "drift": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00t/START HERE/PROJECT_ORCHESTRATION.md"
+      }
     }
   ]
 }

@@ -34,3 +34,5 @@ pnpm exec ../n00-school/scripts/run-training.sh default --dataset horizons-sampl
 ## Capability Manifest
 
 Automation actions are declared in [`capabilities/manifest.json`](capabilities/manifest.json). The manifest powers MCP resources, CLI wrappers, and any future orchestration APIs.
+
+See `START HERE/PROJECT_ORCHESTRATION.md` for the full runbook covering project capture, sync flows, and metadata remediation commands.
