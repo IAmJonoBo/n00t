@@ -106,13 +106,25 @@ Update the generated `github_project` metadata with the resulting board URL.
 
 ### ERPNext Blueprint
 
-`blueprints/erpnext-project-blueprint.yaml` specifies the base ERPNext project structure:
+`blueprints/erpnext-project-blueprint.json` (and project-specific variants under `n00tropic_HQ/.../erpnext/`) define the ERPNext representation:
 
-- Project Code (`PM-UNIFIED` by default), default task groups, SLA targets, and tag mapping.
-- Import into ERPNext via the Workspaces > Projects > Import blueprint flow.
-- Once created, set `erpnext_project` in the metadata to the new code so `project.sync.erpnext` can confirm alignment.
+- Project code plus display name, default task groups, SLA targets, tag defaults, and operator notes.
+- Blueprints are authored in JSON; YAML is also supported when `PyYAML` is available locally.
+- After provisioning, set `erpnext_project` in the artefact metadata so `project.sync.erpnext` can verify alignment.
 
-Automate the import by running `.dev/automation/scripts/erpnext-import-blueprint.sh --instance https://erpnext.example.com --site ops.n00tropic.local --blueprint blueprints/erpnext-project-blueprint.yaml` (requires `ERPNEXT_API_KEY`/`ERPNEXT_API_SECRET` or `ERPNEXT_BEARER_TOKEN`).
+Provision or reconcile the project with:
+
+```bash
+.dev/automation/scripts/erpnext-import-blueprint.sh \
+  --instance http://127.0.0.1:8080 \
+  --site ops.n00tropic.local \
+  --blueprint n00tropic_HQ/99. Internal-Projects/IP-3-frontier-ops-control-plane/erpnext/pm-fops-ctrl-blueprint.json
+```
+
+- Requires `ERPNEXT_API_KEY`/`ERPNEXT_API_SECRET` or `ERPNEXT_BEARER_TOKEN` (script sets `Authorization` and `X-Frappe-Site-Name`).
+- Uses ERPNext’s REST resources: creates the Project when missing, updates description/tags when present, and ensures Tasks (keyed by subject) are created or refreshed without duplication.
+- Writes a machine-readable summary to `/tmp/erpnext_import_resp.json` and echoes any `notes[]` from the blueprint so follow-up checks are obvious.
+- Re-run safely at any time; the script is idempotent and only updates fields that drift from the blueprint. Follow with `project.sync.erpnext` to capture downstream evidence.
 
 ---
 
@@ -178,10 +190,19 @@ If the doc already had metadata, only supplied fields are updated. The command f
 
 ---
 
-## 9. Automation Shortcuts
+## 9. Task Slices & Impact Analysis
+
+- Follow the [Task Slice Playbook](../../n00-horizons/docs/task-slice-playbook.md) for taxonomy, metadata fields, and impact worksheets; every idea, charter, milestone, instrumentation file, and learning log should cite upstream/downstream slices in `links[]`.
+- After editing an artefact, run `project.capture` plus `project.sync.github`/`project.sync.erpnext` to refresh reminders; include the resulting JSON artefact paths in the worksheet so handovers have evidence.
+- For airgapped systems, set `PYTHONPATH` to the n00-frontiers templates directory so hooks resolve locally, and rely on `.dev/automation/scripts/github-project-apply-blueprint.sh --template-number <id>` + `.dev/automation/scripts/erpnext-import-blueprint.sh` to reproduce automation offline.
+
+---
+
+## 10. Automation Shortcuts
 
 - Validate everything: `.dev/automation/scripts/validate-project-metadata.py`
 - Autofix canonical tags/defaults: `.dev/automation/scripts/autofix-project-metadata.py --apply`
+- Summarise slices/links: `.dev/automation/scripts/project-slice-report.py --json artifacts/project-slices.json`
 - Scaffold & register from CLI: `.dev/automation/scripts/project-record-idea.sh --title "..." --owner "..."`
 - Bulk ingest directory:
 
