@@ -13,7 +13,7 @@
     "build": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present build"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
+    "@types/node": "^24.0.0",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "react": "19.2.0",
