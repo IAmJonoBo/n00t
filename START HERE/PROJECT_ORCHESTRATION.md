@@ -150,7 +150,17 @@ The capability:
 3. Registers the idea in `n00-cortex/data/catalog/projects.json`.
 4. Returns any downstream TODOs (e.g., missing GitHub project link).
 
-Once an idea or charter is ready for delivery work, run `project.recordJob --from idea-unified-onboarding-playbook` (or pass explicit metadata) to scaffold `n00-horizons/jobs/job-unified-onboarding-playbook/README.md` with status `queued`, migrate shared metadata, and register the job in the unified catalog.
+Once an idea or charter is ready for delivery work, promote it explicitly:
+
+```bash
+.dev/automation/scripts/project-record-job.sh \
+  --title "Unified onboarding playbook" \
+  --owner service-delivery \
+  --tags governance/project-management automation/n00t \
+  --link idea:../../ideas/idea-unified-onboarding-playbook/README.md
+```
+
+This scaffolds `n00-horizons/jobs/job-unified-onboarding-playbook/README.md` with status `queued`, records upstream links, and registers the job in the unified catalog (including downstream TODOs for GitHub/ERPNext IDs).
 
 ---
 
