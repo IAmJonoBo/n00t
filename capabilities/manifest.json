@@ -819,6 +819,129 @@
       }
     },
     {
+      "id": "project.recordJob",
+      "summary": "Create a frontier-grade job record with metadata, register it, and surface impacts.",
+      "entrypoint": "../../../.dev/automation/scripts/project-record-job.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Job title or shorthand."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Primary owner handle."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional taxonomy-aligned tags."
+          },
+          "sponsors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Stakeholder teams or approvers."
+          },
+          "source": {
+            "type": "string",
+            "description": "Context for job capture."
+          },
+          "reviewDays": {
+            "type": "integer",
+            "description": "Review window in days (default 30)."
+          },
+          "status": {
+            "type": "string",
+            "description": "Override default status (queued)."
+          },
+          "lifecycle": {
+            "type": "string",
+            "description": "Override lifecycle stage (deliver)."
+          },
+          "id": {
+            "type": "string",
+            "description": "Explicit identifier (defaults to slugified title)."
+          },
+          "erpnextProject": {
+            "type": "string",
+            "description": "ERPNext project code to associate."
+          },
+          "githubProject": {
+            "type": "string",
+            "description": "GitHub Project URL to associate."
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional link specs (type:path) for upstream/downstream artefacts."
+          },
+          "from": {
+            "type": "string",
+            "description": "Path to existing metadata to clone defaults from."
+          }
+        },
+        "required": ["title", "owner"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "metadataPath": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "registryPath": {
+            "type": "string"
+          },
+          "artifactPath": {
+            "type": "string"
+          },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "delivery"],
+        "docs": "../../../n00tropic-cerebrum/n00-horizons/docs/job-pipeline.md"
+      }
+    },
+    {
       "id": "project.ingestMarkdown",
       "summary": "Attach metadata to existing markdown documents and register them in the catalog.",
       "entrypoint": "../../../.dev/automation/scripts/project-ingest-markdown.sh",
@@ -831,7 +954,7 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["idea", "project", "learn", "issue"],
+            "enum": ["idea", "project", "learn", "issue", "job"],
             "description": "Classification used to derive defaults."
           },
           "owner": {

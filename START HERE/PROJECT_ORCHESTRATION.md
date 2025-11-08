@@ -12,6 +12,7 @@ This runbook explains how n00t orchestrates project metadata across ideas, chart
 | `project.sync.github`    | Surface upstream/downstream impacts before reconciling with GitHub Projects.          | Prior to updating project boards or creating new columns.       |
 | `project.sync.erpnext`   | Check readiness before syncing metadata to ERPNext project tasks/blueprints.          | Before Platform Ops applies project code updates.               |
 | `project.recordIdea`     | Scaffold a new idea (metadata + Markdown body) and register it automatically.         | During discovery or when transcribing meeting notes.            |
+| `project.recordJob`      | Promote a validated initiative into `n00-horizons/jobs/`.                             | When delivery work starts and governance artefacts are needed.  |
 | `project.ingestMarkdown` | Attach metadata to an existing Markdown document (or remediate gaps) and register it. | When converting historical docs or fixing missing front matter. |
 
 All capabilities emit:
@@ -30,15 +31,15 @@ The execution writes JSON artefacts to `.dev/automation/artifacts/project-sync/`
 
 ### Mandatory Fields
 
-| Field             | Notes                                                                | Autofix                                                      |
-| ----------------- | -------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `id`              | Format `idea-…`, `project-…`, `learn-…`, `issue-…`. Must be unique.  | `project.ingestMarkdown --id`                                |
-| `title`           | Human readable.                                                      | `project.ingestMarkdown` infers from `# Heading`.            |
-| `lifecycle_stage` | `discover / shape / deliver / archive`.                              | `autofix-project-metadata.py --apply --set-default-status`.  |
-| `status`          | e.g. `proposed`, `in-definition`, `recorded`.                        | `autofix-project-metadata.py --set-default-status`.          |
-| `owner`           | Team or person accountable.                                          | `project.ingestMarkdown --owner`.                            |
-| `tags[]`          | Must exist in catalog (`n00-cortex/data/catalog/project-tags.yaml`). | `autofix-project-metadata.py --apply` canonicalises aliases. |
-| `review_date`     | ISO date for next review.                                            | `project.ingestMarkdown --review-days N`.                    |
+| Field             | Notes                                                                        | Autofix                                                      |
+| ----------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `id`              | Format `idea-…`, `project-…`, `learn-…`, `issue-…`, `job-…`. Must be unique. | `project.ingestMarkdown --id`                                |
+| `title`           | Human readable.                                                              | `project.ingestMarkdown` infers from `# Heading`.            |
+| `lifecycle_stage` | `discover / shape / deliver / archive`.                                      | `autofix-project-metadata.py --apply --set-default-status`.  |
+| `status`          | e.g. `proposed`, `in-definition`, `recorded`.                                | `autofix-project-metadata.py --set-default-status`.          |
+| `owner`           | Team or person accountable.                                                  | `project.ingestMarkdown --owner`.                            |
+| `tags[]`          | Must exist in catalog (`n00-cortex/data/catalog/project-tags.yaml`).         | `autofix-project-metadata.py --apply` canonicalises aliases. |
+| `review_date`     | ISO date for next review.                                                    | `project.ingestMarkdown --review-days N`.                    |
 
 ### Link Hygiene
 
@@ -148,6 +149,8 @@ The capability:
 2. Populates metadata (status `proposed`, review date = today + 30 days).
 3. Registers the idea in `n00-cortex/data/catalog/projects.json`.
 4. Returns any downstream TODOs (e.g., missing GitHub project link).
+
+Once an idea or charter is ready for delivery work, run `project.recordJob --from idea-unified-onboarding-playbook` (or pass explicit metadata) to scaffold `n00-horizons/jobs/job-unified-onboarding-playbook/README.md` with status `queued`, migrate shared metadata, and register the job in the unified catalog.
 
 ---
 
