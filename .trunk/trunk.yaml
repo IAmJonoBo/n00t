@@ -32,8 +32,8 @@ lint:
     - eslint@9.39.1
     - osv-scanner@2.2.4
     - prettier@3.6.2
-    - renovate@41.173.1
-    - ruff@0.14.3
+    - renovate@42.0.1
+    - ruff@0.14.4
     - shellcheck@0.11.0
     - shfmt@3.6.0
     - taplo@0.10.0
