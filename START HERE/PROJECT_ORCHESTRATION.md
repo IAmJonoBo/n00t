@@ -6,14 +6,18 @@ This runbook explains how n00t orchestrates project metadata across ideas, chart
 
 ## 1. Capability Overview
 
-| Capability ID            | Purpose                                                                               | When to Use                                                     |
-| ------------------------ | ------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `project.capture`        | Validate an artefact’s metadata and register it against the unified catalog.          | After editing an existing idea/charter/learning log.            |
-| `project.sync.github`    | Surface upstream/downstream impacts before reconciling with GitHub Projects.          | Prior to updating project boards or creating new columns.       |
-| `project.sync.erpnext`   | Check readiness before syncing metadata to ERPNext project tasks/blueprints.          | Before Platform Ops applies project code updates.               |
-| `project.recordIdea`     | Scaffold a new idea (metadata + Markdown body) and register it automatically.         | During discovery or when transcribing meeting notes.            |
-| `project.recordJob`      | Promote a validated initiative into `n00-horizons/jobs/`.                             | When delivery work starts and governance artefacts are needed.  |
-| `project.ingestMarkdown` | Attach metadata to an existing Markdown document (or remediate gaps) and register it. | When converting historical docs or fixing missing front matter. |
+| Capability ID            | Purpose                                                                                 | When to Use                                                           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `project.capture`        | Validate an artefact’s metadata and register it against the unified catalog.            | After editing an existing idea/charter/learning log.                  |
+| `project.sync.github`    | Surface upstream/downstream impacts before reconciling with GitHub Projects.            | Prior to updating project boards or creating new columns.             |
+| `project.sync.erpnext`   | Check readiness before syncing metadata to ERPNext project tasks/blueprints.            | Before Platform Ops applies project code updates.                     |
+| `project.preflight`      | Chain capture + sync checks and enforce readiness gates (links, review cadence, IDs).   | Before moving jobs/milestones into delivery or requesting handoff.    |
+| `project.batchPreflight` | Run the preflight chain across catalog entries or explicit paths to surface drift fast. | Weekly audits, handovers, or when verifying GitHub ↔ ERPNext parity. |
+| `project.recordIdea`     | Scaffold a new idea (metadata + Markdown body) and register it automatically.           | During discovery or when transcribing meeting notes.                  |
+| `project.recordJob`      | Promote a validated initiative into `n00-horizons/jobs/`.                               | When delivery work starts and governance artefacts are needed.        |
+| `project.ingestMarkdown` | Attach metadata to an existing Markdown document (or remediate gaps) and register it.   | When converting historical docs or fixing missing front matter.       |
+| `project.lifecycleRadar` | Emit a lifecycle radar highlighting overdue reviews and missing integrations.           | During weekly planning, audits, or task-slice consolidation.          |
+| `project.controlPanel`   | Generate the control-panel snapshot linking runbooks, radar output, and preflight logs. | Before handoffs; attach to planning docs and job updates.             |
 
 All capabilities emit:
 
@@ -119,13 +123,21 @@ Provision or reconcile the project with:
 .dev/automation/scripts/erpnext-import-blueprint.sh \
   --instance http://127.0.0.1:8080 \
   --site ops.n00tropic.local \
-  --blueprint n00tropic_HQ/99. Internal-Projects/IP-3-frontier-ops-control-plane/erpnext/pm-fops-ctrl-blueprint.json
+  --blueprint n00tropic_HQ/98. Internal-Projects/IP-3-frontier-ops-control-plane/erpnext/pm-fops-ctrl-blueprint.json
 ```
 
 - Requires `ERPNEXT_API_KEY`/`ERPNEXT_API_SECRET` or `ERPNEXT_BEARER_TOKEN` (script sets `Authorization` and `X-Frappe-Site-Name`).
 - Uses ERPNext’s REST resources: creates the Project when missing, updates description/tags when present, and ensures Tasks (keyed by subject) are created or refreshed without duplication.
 - Writes a machine-readable summary to `/tmp/erpnext_import_resp.json` and echoes any `notes[]` from the blueprint so follow-up checks are obvious.
 - Re-run safely at any time; the script is idempotent and only updates fields that drift from the blueprint. Follow with `project.sync.erpnext` to capture downstream evidence.
+
+### Preflight Readiness Gate
+
+- Run `.dev/automation/scripts/project-preflight.sh --path <doc>` (or invoke the `project.preflight` capability) before moving any slice into `in-progress`/`deliver`.
+- The command chains `project.capture`, `project.sync.github`, and `project.sync.erpnext`, then enforces readiness gates: valid `review_date`, non-empty `links[]`, and GitHub/ERPNext identifiers for delivery-stage work.
+- Outputs include the aggregated downstream TODOs plus a `runs[]` array pointing at each individual capability artefact in `.dev/automation/artifacts/project-sync/`.
+- A `status = attention` result means the job/idea still needs metadata fixes before Platform Ops accepts it for execution.
+- Use `project.batchPreflight` (wrapper: `.dev/automation/scripts/project-preflight-batch.sh`) to fan out the same readiness gate across every registry-sourced artefact or a curated list of paths. The summary JSON surfaces ok/attention/error counts so on-call can prioritise fixes.
 
 ---
 
@@ -162,6 +174,8 @@ Once an idea or charter is ready for delivery work, promote it explicitly:
 
 This scaffolds `n00-horizons/jobs/job-unified-onboarding-playbook/README.md` with status `queued`, records upstream links, and registers the job in the unified catalog (including downstream TODOs for GitHub/ERPNext IDs).
 
+Passing `--from <metadata.md>` now clones sponsors, tags, integration identifiers, and every upstream `links[]` entry so the resulting job launches with the same slice graph (plus an automatic link back to the source document).
+
 ---
 
 ## 6. Ingesting Existing Docs
@@ -170,7 +184,7 @@ To attach metadata to an archived doc:
 
 ```bash
 .dev/automation/scripts/project-ingest-markdown.sh \
-  --path n00tropic_HQ/99. Internal-Projects/IP-3-ops-handoff/IP-3.md \
+  --path n00tropic_HQ/98. Internal-Projects/IP-3-ops-handoff/IP-3.md \
   --kind project \
   --owner "platform-ops" \
   --tags governance/project-management automation/n00t \
@@ -207,6 +221,8 @@ If the doc already had metadata, only supplied fields are updated. The command f
 
 - Follow the [Task Slice Playbook](../../n00-horizons/docs/task-slice-playbook.md) for taxonomy, metadata fields, and impact worksheets; every idea, charter, milestone, instrumentation file, and learning log should cite upstream/downstream slices in `links[]`.
 - After editing an artefact, run `project.capture` plus `project.sync.github`/`project.sync.erpnext` to refresh reminders; include the resulting JSON artefact paths in the worksheet so handovers have evidence.
+- When planning retros or audits, run `.dev/automation/scripts/project-lifecycle-radar.sh` (or the `project.lifecycleRadar` capability) to export a JSON radar of overdue reviews, missing integrations, and slices without links.
+- Follow up by generating `n00-horizons/docs/control-panel.md` via `project.controlPanel` so stakeholders can skim the aggregated radar, latest preflight runs, and outstanding jobs without opening each artefact.
 - For airgapped systems, set `PYTHONPATH` to the n00-frontiers templates directory so hooks resolve locally, and rely on `.dev/automation/scripts/github-project-apply-blueprint.sh --template-number <id>` + `.dev/automation/scripts/erpnext-import-blueprint.sh` to reproduce automation offline.
 
 ---
@@ -217,10 +233,13 @@ If the doc already had metadata, only supplied fields are updated. The command f
 - Autofix canonical tags/defaults: `.dev/automation/scripts/autofix-project-metadata.py --apply`
 - Summarise slices/links: `.dev/automation/scripts/project-slice-report.py --json artifacts/project-slices.json`
 - Scaffold & register from CLI: `.dev/automation/scripts/project-record-idea.sh --title "..." --owner "..."`
+- Preflight readiness gate: `.dev/automation/scripts/project-preflight.sh --path <doc>`
+- Lifecycle radar export: `.dev/automation/scripts/project-lifecycle-radar.sh --json artifacts/project-lifecycle-radar.json`
+- Control panel snapshot: `.dev/automation/scripts/project-control-panel.sh`
 - Bulk ingest directory:
 
   ```bash
-  find n00tropic_HQ/99. Internal-Projects -name "*.md" -maxdepth 2 \
+  find n00tropic_HQ/98. Internal-Projects -name "*.md" -maxdepth 2 \
     -exec .dev/automation/scripts/project-ingest-markdown.sh --kind project --path {} \;
   ```
 

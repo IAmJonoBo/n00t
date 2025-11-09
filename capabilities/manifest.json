@@ -727,6 +727,135 @@
       }
     },
     {
+      "id": "project.preflight",
+      "summary": "Chain capture plus sync checks and enforce readiness gates before kicking off delivery work.",
+      "entrypoint": "../../../.dev/automation/scripts/project-preflight.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to the metadata-bearing Markdown document."
+          },
+          "registry": {
+            "type": "string",
+            "description": "Optional registry file override."
+          }
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "status": { "type": "string" },
+          "metadataPath": { "type": "string" },
+          "artifactPath": { "type": "string" },
+          "upstreamImpacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "downstreamImpacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "drift": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "warnings": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "preflightIssues": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "preflightAdvisories": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "runs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action": { "type": "string" },
+                "status": { "type": "string" },
+                "artifactPath": { "type": "string" }
+              },
+              "required": ["action", "status"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00t/START HERE/PROJECT_ORCHESTRATION.md"
+      }
+    },
+    {
+      "id": "project.batchPreflight",
+      "summary": "Run preflight across registry-sourced metadata (or explicit paths) to expose GitHub ↔ ERPNext drift.",
+      "entrypoint": "../../../.dev/automation/scripts/project-preflight-batch.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "paths": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional explicit metadata documents to include."
+          },
+          "includeRegistry": {
+            "type": "boolean",
+            "description": "Include every registry-sourced document even when paths are supplied."
+          },
+          "registry": {
+            "type": "string",
+            "description": "Optional registry file override."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "registryPath": { "type": "string" },
+          "runs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "metadataPath": { "type": "string" },
+                "status": { "type": "string" },
+                "artifactPath": { "type": "string" },
+                "id": { "type": "string" },
+                "title": { "type": "string" },
+                "error": { "type": "string" }
+              },
+              "required": ["metadataPath", "status"],
+              "additionalProperties": false
+            }
+          },
+          "okCount": { "type": "integer" },
+          "attentionCount": { "type": "integer" },
+          "errorCount": { "type": "integer" }
+        },
+        "required": ["status", "runs"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00t/START HERE/PROJECT_ORCHESTRATION.md"
+      }
+    },
+    {
       "id": "project.recordIdea",
       "summary": "Scaffold a new idea with metadata, register it, and surface automation impacts.",
       "entrypoint": "../../../.dev/automation/scripts/project-record-idea.sh",
@@ -1048,6 +1177,71 @@
       "metadata": {
         "tags": ["project-management", "automation", "governance"],
         "docs": "../../../n00tropic-cerebrum/n00t/START HERE/PROJECT_ORCHESTRATION.md"
+      }
+    },
+    {
+      "id": "project.lifecycleRadar",
+      "summary": "Summarise lifecycle readiness gaps across metadata-bearing artefacts.",
+      "entrypoint": "../../../.dev/automation/scripts/project-lifecycle-radar.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "json": {
+            "type": "string",
+            "description": "Optional override for the JSON report destination."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "reportPath": { "type": "string" },
+          "documents": { "type": "integer" },
+          "lifecycleTotals": { "type": "object" },
+          "statusTotals": { "type": "object" },
+          "reviewBuckets": { "type": "object" },
+          "linkGaps": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "integrationGaps": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "metadataErrors": {
+            "type": "array",
+            "items": { "type": "object" }
+          }
+        },
+        "required": ["status", "reportPath"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00-horizons/docs/task-slice-playbook.md"
+      }
+    },
+    {
+      "id": "project.controlPanel",
+      "summary": "Generate the control-panel Markdown that links runbooks, radar output, and preflight artefacts.",
+      "entrypoint": "../../../.dev/automation/scripts/project-control-panel.sh",
+      "inputs": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" }
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00-horizons/docs/control-panel.md"
       }
     }
   ]
