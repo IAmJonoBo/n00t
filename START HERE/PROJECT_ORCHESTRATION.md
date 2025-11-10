@@ -43,7 +43,7 @@ The execution writes JSON artefacts to `.dev/automation/artifacts/project-sync/`
 | `status`          | e.g. `proposed`, `in-definition`, `recorded`.                                | `autofix-project-metadata.py --set-default-status`.          |
 | `owner`           | Team or person accountable.                                                  | `project.ingestMarkdown --owner`.                            |
 | `tags[]`          | Must exist in catalog (`n00-cortex/data/catalog/project-tags.yaml`).         | `autofix-project-metadata.py --apply` canonicalises aliases. |
-| `review_date`     | ISO date for next review.                                                    | `project.ingestMarkdown --review-days N`.                    |
+| `review_date`     | Next review in `DD-MM-YYYY`.                                                  | `project.ingestMarkdown --review-days N`.                    |
 
 ### Link Hygiene
 
