@@ -113,6 +113,62 @@
       }
     },
     {
+      "id": "workspace.gitDoctor",
+      "summary": "Summarise git health across the workspace and optionally clean untracked or sync submodules.",
+      "entrypoint": "../../.dev/automation/scripts/workspace-health.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "cleanUntracked": {
+            "type": "boolean",
+            "description": "Run git clean -fd for repos that only have untracked files."
+          },
+          "syncSubmodules": {
+            "type": "boolean",
+            "description": "Invoke git submodule sync && update before reporting."
+          },
+          "publishArtifact": {
+            "type": "boolean",
+            "description": "Write artifacts/workspace-health.json for downstream agents."
+          },
+          "strict": {
+            "type": "boolean",
+            "description": "Exit non-zero when the workspace or submodules are dirty or diverged."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string",
+            "description": "Path to the JSON artifact when publishArtifact=true."
+          },
+          "root": {
+            "type": "object",
+            "description": "Root repo git summary payload."
+          },
+          "submodules": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Per-submodule git summaries."
+          }
+        },
+        "required": ["status"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["workspace", "git", "automation"],
+        "docs": "../../1. Cerebrum Docs/WORKSPACE_MAINTENANCE.md"
+      }
+    },
+    {
       "id": "dependencies.check",
       "summary": "Run canonical + override dependency consistency checks.",
       "entrypoint": "../../../.dev/automation/scripts/check-cross-repo-consistency.py",

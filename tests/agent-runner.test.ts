@@ -35,6 +35,7 @@ describe("parseArgs", () => {
       simulateId: undefined,
       dryRunOnly: false,
       envFiles: [],
+      autoApprove: false,
     });
   });
 
@@ -59,6 +60,7 @@ describe("parseArgs", () => {
       simulateId: "abc123",
       dryRunOnly: true,
       envFiles: [],
+      autoApprove: false,
     });
   });
 
@@ -68,9 +70,11 @@ describe("parseArgs", () => {
       "secret.env",
       "--env",
       "another.env",
+      "--auto-approve",
     ]);
 
     expect(result.envFiles).toEqual(["secret.env", "another.env"]);
+    expect(result.autoApprove).toBe(true);
   });
 });
 

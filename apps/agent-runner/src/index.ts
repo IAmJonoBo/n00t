@@ -24,6 +24,7 @@ export interface CliOptions {
   simulateId?: string;
   dryRunOnly: boolean;
   envFiles: string[];
+  autoApprove: boolean;
 }
 
 interface AgentRunRecord {
@@ -251,6 +252,7 @@ export function parseArgs(argv: string[]): CliOptions {
     planOnly: false,
     dryRunOnly: false,
     envFiles: [],
+    autoApprove: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
@@ -287,6 +289,9 @@ export function parseArgs(argv: string[]): CliOptions {
           options.envFiles.push(argv[i + 1]);
         }
         i += 1;
+        break;
+      case "--auto-approve":
+        options.autoApprove = true;
         break;
       default:
         break;
@@ -605,10 +610,14 @@ async function main() {
     return;
   }
 
-  const approved = await requestApproval();
-  if (!approved) {
-    console.log(chalk.yellow("Execution cancelled by operator."));
-    return;
+  if (options.autoApprove) {
+    console.log(chalk.white("Auto-approve enabled. Continuing without manual confirmation."));
+  } else {
+    const approved = await requestApproval();
+    if (!approved) {
+      console.log(chalk.yellow("Execution cancelled by operator."));
+      return;
+    }
   }
 
   if (options.dryRunOnly && !options.check && capability.supportsCheck) {
