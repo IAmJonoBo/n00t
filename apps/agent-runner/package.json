@@ -1,0 +1,25 @@
+{
+  "name": "n00t-agent-runner",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "n00t-agent": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+  "build": "tsup src/index.ts --format esm --splitting false",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@n00t/capability-ir": "workspace:*",
+    "@n00t/discovery": "workspace:*",
+    "chalk": "^5.4.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
