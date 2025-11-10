@@ -97,6 +97,8 @@ gh project create --copy-file blueprints/github-project-template.json \
   --title "Unified PM – {{ cookiecutter.project_name }}"
 ```
 
+> GitHub Projects reference: [Planning and tracking with Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects). Use an organisation-scoped fine-grained token with the **Project** and **Project Item** permissions to avoid HTTP 403 responses when automations add items to the `https://github.com/orgs/n00tropic/projects/1` board.
+
 > Use `.dev/automation/scripts/github-project-apply-blueprint.sh --owner {{ cookiecutter.github_org }} --title "Unified PM – {{ cookiecutter.project_name }}" --blueprint blueprints/github-project-template.json` to automate the command and guarantee required flags are supplied.
 
 The blueprint defines:
@@ -189,7 +191,7 @@ To attach metadata to an archived doc:
   --owner "platform-ops" \
   --tags governance/project-management automation/n00t \
   --erpnext-project PM-OPS-HANDOFF \
-  --github-project https://github.com/orgs/IAmJonoBo/projects/101
+  --github-project https://github.com/orgs/n00tropic/projects/1
 ```
 
 If the doc already had metadata, only supplied fields are updated. The command finishes by running `project.capture`, guaranteeing the registry stays current.
