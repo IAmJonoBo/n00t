@@ -14,7 +14,7 @@ runtimes:
   enabled:
     - python@3.10.8
     - go@1.22.6
-    - node@22.20.0
+    - node@25.1.0
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   enabled:
