@@ -42,8 +42,8 @@ importers:
         specifier: ^5.4.1
         version: 5.6.2
       dotenv:
-        specifier: ^16.4.5
-        version: 16.6.1
+        specifier: ^17.0.0
+        version: 17.2.3
     devDependencies:
       tsup:
         specifier: ^8.3.0
@@ -791,8 +791,8 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -2025,7 +2025,7 @@ snapshots:
   detect-libc@2.1.2:
     optional: true
 
-  dotenv@16.6.1: {}
+  dotenv@17.2.3: {}
 
   dunder-proto@1.0.1:
     dependencies:

@@ -15,7 +15,7 @@
     "@n00t/capability-ir": "workspace:*",
     "@n00t/discovery": "workspace:*",
     "chalk": "^5.4.1",
-    "dotenv": "^16.4.5"
+    "dotenv": "^17.0.0"
   },
   "devDependencies": {
     "tsup": "^8.3.0",
