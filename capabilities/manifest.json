@@ -1299,6 +1299,46 @@
         "tags": ["project-management", "automation", "governance"],
         "docs": "../../../n00tropic-cerebrum/n00-horizons/docs/control-panel.md"
       }
+    },
+    {
+      "id": "project.autofixLinks",
+      "summary": "Repair metadata link blocks (canonical paths, reciprocal references, artefact logging).",
+      "entrypoint": "../../../.dev/automation/scripts/project-autofix-links.sh",
+      "inputs": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Specific metadata document to repair."
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Process every known metadata document."
+          },
+          "apply": {
+            "type": "boolean",
+            "description": "Persist fixes (defaults to dry-run when false)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputs": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "artifactPath": { "type": "string" },
+          "changes": {
+            "type": "array",
+            "items": { "type": "object" }
+          }
+        },
+        "required": ["status", "artifactPath"],
+        "additionalProperties": false
+      },
+      "metadata": {
+        "tags": ["project-management", "automation", "governance"],
+        "docs": "../../../n00tropic-cerebrum/n00-horizons/jobs/job-project-autofix-links/README.md"
+      }
     }
   ]
 }

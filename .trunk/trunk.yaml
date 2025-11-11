@@ -26,16 +26,16 @@ lint:
     - golangci-lint2@2.6.1
     - actionlint@1.7.8
     - bandit@1.8.6
-    - checkov@3.2.490
+    - checkov@3.2.491
     - git-diff-check
     - markdownlint-cli2@0.18.1
     - eslint@9.39.1
     - osv-scanner@2.2.4
     - prettier@3.6.2
-    - renovate@42.0.1
+    - renovate@42.4.0
     - ruff@0.14.4
     - shellcheck@0.11.0
-    - shfmt@3.6.0
+    - shfmt@3.12.0
     - taplo@0.10.0
     - trufflehog@3.90.13
     - yamllint@1.37.1
