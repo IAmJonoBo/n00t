@@ -17,7 +17,7 @@
 | Workspace hygiene & drift detection | `workspace.metaCheck` | `{ "skipBootstrap": false }` (default) | Aggregates schema checks, Frontiers sanity, pip-audit. |
 | Fast-forward repos | `workspace.refresh` | Optional `{ "repos": ["n00-cortex", …] }` | Logs refreshed repos and failures. |
 | Trunk upgrade gate | `workspace.trunkUpgrade` | `{}` | Promotes canonical Trunk toolchain. |
-| Release manifesting | `workspace.release` | `{ "version": "YYYY.MM.DD" }` | Writes `1. Cerebrum Docs/releases.yaml`. |
+| Release manifesting | `workspace.release` | `{ "version": "DD-MM-YYYY" }` | Writes `1. Cerebrum Docs/releases.yaml`. |
 | Dependency posture | `dependencies.check` | `{}` | Validates toolchain manifest alignment. |
 | Renovate snapshot | `dependencies.dashboard` | `{ "output": ".dev/automation/artifacts/renovate/dashboard.json" }` | Produces changelog-friendly dashboard. |
 | Cortex ⇄ Frontiers drift | `cortex.frontiersIngest` | `{ "check": true }` preferred on CI | Regenerates or validates catalog exports. |
@@ -36,4 +36,3 @@
 - Route progress logs to `.dev/automation/artifacts/` when available. Link the artefact or log path in the Explain phase.
 - Stream completion telemetry to n00-cortex registries (for example via `record-capability-run.py`) when the capability provides hooks.
 - Preserve dry-run artefacts separately to simplify audit trails.
-
