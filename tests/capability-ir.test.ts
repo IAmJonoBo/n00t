@@ -1,10 +1,13 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, test } from "vitest";
 import {
+  assertValidCapabilityManifest,
   capabilitySupportsCheck,
   normalizeManifest,
-  type CapabilityManifest
+  type CapabilityManifest,
+  type ManifestCapability
 } from "@n00t/capability-ir";
-import path from "node:path";
 
 describe("capability manifest helpers", () => {
   test("normalizeManifest maps fields and resolves entrypoints", () => {
@@ -76,7 +79,28 @@ describe("capability manifest helpers", () => {
       }
     };
 
-    expect(capabilitySupportsCheck(capWithCheck as any)).toBe(true);
-    expect(capabilitySupportsCheck(capWithout as any)).toBe(false);
+    expect(capabilitySupportsCheck(capWithCheck as ManifestCapability)).toBe(true);
+    expect(capabilitySupportsCheck(capWithout as ManifestCapability)).toBe(false);
+  });
+
+  test("workspace manifest validates", () => {
+    const manifestPath = path.resolve(process.cwd(), "capabilities/manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8")) as CapabilityManifest;
+    expect(() => assertValidCapabilityManifest(manifest, manifestPath)).not.toThrow();
+  });
+
+  test("validator surfaces helpful errors", () => {
+    const invalid: CapabilityManifest = {
+      version: "1.2.3",
+      capabilities: [
+        {
+          id: "missing.entrypoint",
+        } as ManifestCapability,
+      ],
+    } as CapabilityManifest;
+
+    expect(() =>
+      assertValidCapabilityManifest(invalid, "/tmp/manifest.json"),
+    ).toThrowError(/entrypoint/);
   });
 });

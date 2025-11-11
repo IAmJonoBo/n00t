@@ -7,8 +7,10 @@ import process from "node:process";
 import { stdin as input, stdout as output } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
+
 import chalk from "chalk";
 import dotenv from "dotenv";
+
 import type { CapabilitySummary } from "@n00t/capability-ir";
 import { discoverCapabilities } from "@n00t/discovery";
 
@@ -346,7 +348,7 @@ async function readAgentRuns(): Promise<AgentRunRecord[]> {
 
 async function writeAgentRuns(records: AgentRunRecord[]) {
   await ensureArtifactsRoot();
-  await writeFile(agentRunsPath, JSON.stringify(records, null, 2) + "\n", "utf-8");
+  await writeFile(agentRunsPath, `${JSON.stringify(records, null, 2)}\n`, "utf-8");
 }
 
 async function appendAgentRun(record: AgentRunRecord) {

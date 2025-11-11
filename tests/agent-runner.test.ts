@@ -1,28 +1,40 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { describe, it, expect, afterAll } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type {
   CapabilitySummary,
   RunResult,
   SecretMapping,
-} from "../apps/agent-runner/src/index";
+} from "../apps/agent-runner/src/index.ts";
+
+type AgentRunnerModule = typeof import("../apps/agent-runner/src/index.ts");
 
 const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "agent-runner-tests-"));
 process.env.N00T_HQ_ROOT = tempRoot;
 process.env.N00T_TELEMETRY_ROOT = path.join(tempRoot, "telemetry");
 process.env.N00T_SECRETS_ROOT = path.join(tempRoot, "secrets");
 
-const agentRunner = await import("../apps/agent-runner/src/index");
+let parseArgs: AgentRunnerModule["parseArgs"];
+let summariseResult: AgentRunnerModule["summariseResult"];
+let johannesburgTimestamp: AgentRunnerModule["johannesburgTimestamp"];
+let TZ: AgentRunnerModule["TZ"];
+let buildSecretRequestList: AgentRunnerModule["buildSecretRequestList"];
+let emitTelemetryEvent: AgentRunnerModule["emitTelemetryEvent"];
+let patternMatchesCapability: AgentRunnerModule["patternMatchesCapability"];
 
-const {
-  parseArgs,
-  summariseResult,
-  johannesburgTimestamp,
-  TZ,
-  buildSecretRequestList,
-  emitTelemetryEvent,
-} = agentRunner;
+beforeAll(async () => {
+  const agentRunner = await import("../apps/agent-runner/src/index.ts");
+  ({
+    parseArgs,
+    summariseResult,
+    johannesburgTimestamp,
+    TZ,
+    buildSecretRequestList,
+    emitTelemetryEvent,
+    patternMatchesCapability,
+  } = agentRunner);
+});
 
 describe("parseArgs", () => {
   it("applies defaults when no flags are provided", () => {
@@ -144,9 +156,9 @@ describe("buildSecretRequestList", () => {
       ],
     };
 
-  expect(agentRunner.patternMatchesCapability("erpnext.*", sampleCapability)).toBe(true);
+  expect(patternMatchesCapability("erpnext.*", sampleCapability)).toBe(true);
 
-  const requested = buildSecretRequestList(sampleCapability, ["extra.env"], mapping);
+    const requested = buildSecretRequestList(sampleCapability, ["extra.env"], mapping);
 
     expect(requested).toEqual([
       "erpnext.env",

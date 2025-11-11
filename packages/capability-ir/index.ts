@@ -1,5 +1,10 @@
 import path from "node:path";
 
+import { Ajv2020 } from "ajv/dist/2020.js";
+import type { ErrorObject, ValidateFunction } from "ajv";
+
+import capabilityManifestSchema from "./schema/capability-manifest.schema.json" with { type: "json" };
+
 export type JSONValue =
   | string
   | number
@@ -62,6 +67,37 @@ export interface CapabilityManifest {
   capabilities?: ManifestCapability[];
 }
 
+const ajv = new Ajv2020({
+  allErrors: true,
+  strict: false,
+});
+
+const manifestValidator: ValidateFunction<CapabilityManifest> = ajv.compile(capabilityManifestSchema);
+
+function formatManifestError(error: ErrorObject): string {
+  const pointer = error.instancePath ? error.instancePath : "/";
+  const message = error.message ?? "validation error";
+  const params = error.params && Object.keys(error.params).length > 0
+    ? ` (${JSON.stringify(error.params)})`
+    : "";
+  return `${pointer} ${message}${params}`;
+}
+
+export function assertValidCapabilityManifest(
+  manifest: CapabilityManifest,
+  manifestPath: string,
+): void {
+  if (manifestValidator(manifest)) {
+    return;
+  }
+
+  const errors = manifestValidator.errors ?? [];
+  const rendered = errors.map(formatManifestError).join("\n");
+  throw new Error(
+    `Capability manifest at ${manifestPath} failed validation:\n${rendered}`,
+  );
+}
+
 export interface CapabilitySummary {
   id: string;
   summary: string;
@@ -87,6 +123,7 @@ export function normalizeManifest(
   manifest: CapabilityManifest,
   manifestPath: string
 ): DiscoveryPayload {
+  assertValidCapabilityManifest(manifest, manifestPath);
   const capabilities = manifest.capabilities ?? [];
   const baseDir = path.dirname(manifestPath);
   const normalized = capabilities.map((capability) =>

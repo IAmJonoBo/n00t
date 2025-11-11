@@ -1,0 +1,133 @@
+{
+  "$id": "https://schemas.n00t.dev/capability-manifest.schema.json",
+  "title": "Capability Manifest",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    }
+  },
+  "required": ["version", "capabilities"],
+  "additionalProperties": false,
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "required": ["id", "entrypoint"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        },
+        "entrypoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "inputs": {
+          "$ref": "#/$defs/jsonSchema"
+        },
+        "outputs": {
+          "$ref": "#/$defs/jsonSchema"
+        },
+        "tags": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "surfaces": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "status": {
+          "type": "string"
+        },
+        "autoApprove": {
+          "type": "boolean"
+        },
+        "plan": {
+          "type": "object"
+        },
+        "manifestPath": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "docs": {
+          "type": "string"
+        },
+        "runbook": {
+          "type": "string"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "tags": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "surfaces": {
+          "$ref": "#/$defs/stringArray"
+        }
+      },
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "docs": {
+          "type": "string"
+        },
+        "runbook": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "tags": {
+          "$ref": "#/$defs/stringArray"
+        },
+        "surfaces": {
+          "$ref": "#/$defs/stringArray"
+        }
+      },
+      "additionalProperties": true
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "jsonSchema": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    }
+  }
+}

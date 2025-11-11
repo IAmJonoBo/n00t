@@ -40,5 +40,5 @@ if (record.check) {
 }
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-fs.writeFileSync(outputPath, JSON.stringify(record, null, 2) + "\n", "utf-8");
+fs.writeFileSync(outputPath, `${JSON.stringify(record, null, 2)}\n`, "utf-8");
 log(`Output written to ${outputPath}`);
