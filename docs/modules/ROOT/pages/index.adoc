@@ -1,0 +1,5 @@
+= n00t Agent Control Plane
+:page-tags: diataxis:explanation, domain:platform, audience:contrib, stability:beta
+:reviewed: 2025-11-12
+
+This page points to the main MCP and capability documentation.

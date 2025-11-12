@@ -1,0 +1,5 @@
+name: n00t
+title: n00t (Agent Control Plane)
+version: main
+nav:
+  - modules/ROOT/nav.adoc
