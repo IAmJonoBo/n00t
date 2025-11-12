@@ -1,0 +1,10 @@
+site:
+  title: n00t docs
+  start_page: n00t::index.adoc
+content:
+  sources:
+    - url: .
+      branches: [HEAD]
+      start_paths: [docs]
+antora:
+  extensions: ["@antora/lunr-extension"]

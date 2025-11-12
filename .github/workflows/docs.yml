@@ -1,0 +1,19 @@
+name: docs
+on:
+  push: { branches: [ docs/antora-migration, main ] }
+  pull_request: {}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build Antora
+        run: pnpm exec antora ./antora-playbook.yml --stacktrace
