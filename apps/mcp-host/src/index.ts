@@ -71,10 +71,10 @@ interface ClientState {
 const workspaceRoot =
   process.env.WORKSPACE_ROOT ??
   path.resolve(process.cwd(), "../../..", "n00tropic-cerebrum");
-const port = Number(process.env.N00TON_MCP_PORT ?? "9088");
+const port = Number(process.env.n00t_MCP_PORT ?? "9088");
 
 console.log(
-  `[n00ton:mcp-host] starting (workspace=${workspaceRoot}, port=${port})`,
+  `[n00t:mcp-host] starting (workspace=${workspaceRoot}, port=${port})`,
 );
 
 const wss = new WebSocketServer({ port });
@@ -99,7 +99,7 @@ function readAgentRuns(): AgentRunRecord[] {
       fs.writeFileSync(agentRunsPath, "[\n]", "utf-8");
       return [];
     }
-    console.error("[n00ton:mcp-host] failed to read agent runs file:", error);
+    console.error("[n00t:mcp-host] failed to read agent runs file:", error);
     return [];
   }
 }
@@ -109,7 +109,7 @@ function writeAgentRuns(records: AgentRunRecord[]) {
     fs.mkdirSync(path.dirname(agentRunsPath), { recursive: true });
     fs.writeFileSync(agentRunsPath, JSON.stringify(records, null, 2) + "\n", "utf-8");
   } catch (error) {
-    console.error("[n00ton:mcp-host] failed to persist agent runs:", error);
+    console.error("[n00t:mcp-host] failed to persist agent runs:", error);
   }
 }
 
@@ -240,7 +240,7 @@ function readJsonIfExists(filePath: string): Record<string, unknown> | null {
     const raw = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(raw) as Record<string, unknown>;
   } catch (error) {
-    console.warn(`[n00ton:mcp-host] unable to read JSON file ${filePath}:`, error);
+    console.warn(`[n00t:mcp-host] unable to read JSON file ${filePath}:`, error);
     return null;
   }
 }
@@ -288,7 +288,7 @@ function safeSend(ws: WebSocket, payload: OutboundMessage) {
   try {
     ws.send(JSON.stringify(payload));
   } catch (error) {
-    console.error("[n00ton:mcp-host] failed to send payload", error);
+    console.error("[n00t:mcp-host] failed to send payload", error);
   }
 }
 
@@ -304,11 +304,11 @@ function loadCapabilities() {
     discoveryPayload = payload;
     manifestPath = payload.manifestPath;
     console.log(
-      `[n00ton:mcp-host] loaded ${payload.capabilities.length} capabilities`,
+      `[n00t:mcp-host] loaded ${payload.capabilities.length} capabilities`,
     );
     broadcast({ type: "capabilities", payload });
   } catch (error) {
-    console.error("[n00ton:mcp-host] failed to load capabilities:", error);
+    console.error("[n00t:mcp-host] failed to load capabilities:", error);
     broadcast({
       type: "error",
       message: String(error),
@@ -326,7 +326,7 @@ function watchManifest() {
     });
   } catch (error) {
     console.warn(
-      "[n00ton:mcp-host] unable to watch manifest for changes:",
+      "[n00t:mcp-host] unable to watch manifest for changes:",
       error,
     );
   }
@@ -435,7 +435,7 @@ function handleRunRequest(
   }
 
   child.on("error", (error) => {
-    console.error("[n00ton:mcp-host] failed to spawn capability", error);
+    console.error("[n00t:mcp-host] failed to spawn capability", error);
     if (!activeRun.completed) {
       const trainingMetadata = collectTrainingMetadata(activeRun) ?? activeRun.metadataPayload ?? null;
       if (trainingMetadata) {
@@ -584,7 +584,7 @@ wss.on("connection", (ws: WebSocket) => {
           });
       }
     } catch (error) {
-      console.error("[n00ton:mcp-host] failed to handle message:", error);
+      console.error("[n00t:mcp-host] failed to handle message:", error);
       safeSend(ws, {
         type: "error",
         message: `Failed to process message: ${String(error)}`,
@@ -606,5 +606,5 @@ wss.on("connection", (ws: WebSocket) => {
 wss.on("listening", () => {
   loadCapabilities();
   watchManifest();
-  console.log(`[n00ton:mcp-host] listening on ws://localhost:${port}`);
+  console.log(`[n00t:mcp-host] listening on ws://localhost:${port}`);
 });

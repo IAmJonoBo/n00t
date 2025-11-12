@@ -1,10 +1,10 @@
-Let’s make n00ton’s window the tiny cockpit it deserves.
+Let’s make n00t’s window the tiny cockpit it deserves.
 
 Below is a brief you can drop in as UID-UX-WIDGET-BRIEF.md alongside the repo.
 
 ⸻
 
-n00ton Widget / Mini-Applet Interaction Brief
+n00t Widget / Mini-Applet Interaction Brief
 
 1. Purpose
 
@@ -20,8 +20,8 @@ This is aligned with current conversational UI guidance (progressive disclosure,
 
 2. Core user flows
 	1.	Ask → Plan → Approve → Run → Explain
-	•	User: “n00ton, run the full test suite.”
-	•	Widget shows: “I found 3 ways to do tests: npm run test, pnpm test, MCP: repo-test.”
+	•	User: “n00t, run the full test suite.”
+	•	Widget shows: “I found 3 ways to do tests: pnpm test, npm run test, MCP: repo-test.”
 	•	User picks or confirms.
 	•	Execution streams logs in-line.
 	•	Post-run summary + “promote to shortcut”.
@@ -31,7 +31,7 @@ This is aligned with current conversational UI guidance (progressive disclosure,
 	•	User taps one → prefilled prompt → run.
 	•	User can pin to “Fast lane” bar.
 	3.	Teach → Improve
-	•	When user corrects n00ton (“use the staging CLI, not prod”), widget offers “save as rule for this repo”.
+	•	When user corrects n00t (“use the staging CLI, not prod”), widget offers “save as rule for this repo”.
 	•	Corrections are stored as human feedback events for the orchestrator. This is the human-in-the-loop feedback loop.  
 	4.	Deploy MCP at will (guarded)
 	•	If discovery finds a CLI without MCP, widget proposes: “Generate MCP wrapper for billing-cli?”
@@ -41,7 +41,7 @@ This is aligned with current conversational UI guidance (progressive disclosure,
 
 3. Layout (small window / overlay)
 	•	Header: project name, environment badge (dev/stage/prod), connection state.
-	•	Conversation stream: alternates user ↔ n00ton ↔ system events.
+	•	Conversation stream: alternates user ↔ n00t ↔ system events.
 	•	Inline status chips: “planning”, “requires approval”, “running (12s)”, “done”.
 	•	Bottom bar: input + mode toggles (Chat | Command | Search).
 	•	Right mini-panel (collapsible): “Capabilities” (sorted: recommended, recent, dangerous).
@@ -60,13 +60,13 @@ Show plans as numbered steps; allow user to edit a step before execution.
 	4.	Always a way to undo or dry-run
 Every destructive action must offer: “Dry-run”, “Run as me”, “Don’t ask again for this tool”.
 	5.	Transparent sources
-When n00ton searches the web or a repo, show sources and timestamps; web search should mention the domain to avoid silent prompt poisoning. (This is SIFT/lateral-reading aligned.)  
+When n00t searches the web or a repo, show sources and timestamps; web search should mention the domain to avoid silent prompt poisoning. (This is SIFT/lateral-reading aligned.)  
 
 ⸻
 
 5. Human-in-the-loop (HITL) modes
-	•	Observe (default): n00ton can read capabilities, search, simulate plans — no writes.
-	•	Confirm: n00ton can propose calls; user must OK.
+	•	Observe (default): n00t can read capabilities, search, simulate plans — no writes.
+	•	Confirm: n00t can propose calls; user must OK.
 	•	Trusted: per-capability auto-run, but logs are shown.
 	•	Escalate: user can force human or admin review.
 
@@ -82,7 +82,7 @@ In widget form:
 	•	Streaks: “3 successful runs today.”
 	•	Mastery tags: “You’ve configured 4/7 capabilities for this repo.”
 	•	Speed medals: “First-run without edits.” (Local-only, no vanity servers.)
-	•	Narrative tone: n00ton can theme itself to repo name (“Project Atlas ops panel initialised.”)
+	•	Narrative tone: n00t can theme itself to repo name (“Project Atlas ops panel initialised.”)
 
 Keep it opt-in to avoid motivational reactance for senior users.
 
@@ -91,7 +91,7 @@ Keep it opt-in to avoid motivational reactance for senior users.
 7. NLP & prompting layer
 	•	Intent router: classify to (a) repo action, (b) MCP deployment/scaffold, (c) web search, (d) advisory.
 	•	Context injectors: when intent is repo action, auto-inject capability IR subset and last 5 runs.
-	•	Repair prompts: if a tool fails, n00ton suggests: “Tool failed: missing env VAR. Add to MCP server?” — keeps user in-the-loop instead of failing silently.
+	•	Repair prompts: if a tool fails, n00t suggests: “Tool failed: missing env VAR. Add to MCP server?” — keeps user in-the-loop instead of failing silently.
 	•	Local model option: ship a small on-device model to handle intent + paraphrasing, and fall back to cloud for codegen and scaffolding. This addresses your “offer advice and search” idea without making the widget useless offline.
 
 ⸻
@@ -128,4 +128,4 @@ Key results: widget should always pre-announce actions, expose capability origin
 Uncertainty: medium — real-world repos will have noisy capabilities; some users will prefer CLI-only view.
 Safer alternative: ship in “Observe” mode only; allow admins to enable MCP generation and web search per repo.
 
-This is the human-friendly layer that will make n00ton feel like a co-pilot, not a gremlin.
+This is the human-friendly layer that will make n00t feel like a co-pilot, not a gremlin.

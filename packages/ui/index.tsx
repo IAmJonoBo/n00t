@@ -65,13 +65,13 @@ function generateId(): string {
 const systemMessage: ControlMessage = {
   id: generateId(),
   role: "system",
-  text: "n00ton Control Centre ready. Select a capability and provide a prompt to launch automation.",
+  text: "n00t Control Centre ready. Select a capability and provide a prompt to launch automation.",
   timestamp: new Date(),
   stream: "transcript",
   status: "informational",
 };
 
-export function N00tonControlCentre({ endpoint = "ws://localhost:9088" }: ControlCentreProps) {
+export function n00tControlCentre({ endpoint = "ws://localhost:9088" }: ControlCentreProps) {
   const [connectionStatus, setConnectionStatus] = useState<"connecting" | "ready" | "error">("connecting");
   const [capabilities, setCapabilities] = useState<CapabilitySummary[]>([]);
   const [selectedCapability, setSelectedCapability] = useState<CapabilitySummary | null>(null);
@@ -95,7 +95,7 @@ export function N00tonControlCentre({ endpoint = "ws://localhost:9088" }: Contro
         const incoming = JSON.parse(event.data) as Record<string, unknown>;
         handleServerMessage(incoming);
       } catch (error) {
-        console.error("[n00ton-ui] failed to parse message", error);
+        console.error("[n00t-ui] failed to parse message", error);
       }
     };
     socket.onerror = () => {
@@ -468,7 +468,7 @@ export function N00tonControlCentre({ endpoint = "ws://localhost:9088" }: Contro
           <textarea
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            placeholder="Ask n00ton for assistance…"
+            placeholder="Ask n00t for assistance…"
             style={textAreaStyle}
             rows={3}
           />

@@ -1,4 +1,4 @@
-import { N00tonControlCentre } from "@n00t/ui";
+import { n00tControlCentre } from "@n00t/ui";
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
           maxWidth: "1280px",
         }}
       >
-        <N00tonControlCentre />
+        <n00tControlCentre />
       </div>
     </main>
   );

@@ -30,7 +30,7 @@ describe("capability manifest helpers", () => {
             }
           },
           metadata: {
-            docs: "docs/experience/n00ton-chat-control.md",
+            docs: "docs/experience/n00t-chat-control.md",
             tags: ["automation", "frontiers"]
           },
           provenance: {
@@ -52,7 +52,7 @@ describe("capability manifest helpers", () => {
     expect(capability.tags).toContain("frontiers");
     expect(capability.surfaces).toContain("macOS-dashboard");
     expect(capability.surfaces).toContain("web-control-centre");
-    expect(capability.docsLink).toBe("docs/experience/n00ton-chat-control.md");
+    expect(capability.docsLink).toBe("docs/experience/n00t-chat-control.md");
     expect(capability.absoluteEntrypoint).toEqual(
       path.resolve(
         path.dirname(manifestPath),

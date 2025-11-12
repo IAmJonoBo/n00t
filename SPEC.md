@@ -1,4 +1,4 @@
-# n00ton – Project Specification (Starter)
+# n00t – Project Specification (Starter)
 
 ## 1. Vision
 Create a bolt-on, MCP-first "agent control centre" that can be dropped into any codebase or environment and automatically:
@@ -27,7 +27,7 @@ Create a bolt-on, MCP-first "agent control centre" that can be dropped into any 
     "id": "cli.npm.test",
     "kind": "cli",
     "title": "Run tests",
-    "description": "npm run test",
+  "description": "pnpm run test",
     "inputs": [],
     "runner": {
       "type": "shell",

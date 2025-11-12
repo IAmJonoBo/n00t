@@ -35,7 +35,7 @@ The n00t agent runtime coordinates discovery, MCP hosting, and execution guardra
 | Variable | Purpose | Notes |
 | --- | --- | --- |
 | `WORKSPACE_ROOT` | Absolute path to workspace root (defaults to repository root). | Passed automatically by scripts and MCP host. |
-| `N00TON_MCP_PORT` | Port for the WebSocket bridge. | Defaults to `9088`. |
+| `n00t_MCP_PORT` | Port for the WebSocket bridge. | Defaults to `9088`. |
 | `CAPABILITY_PAYLOAD` | JSON payload passed to shell entrypoints. | Populated by runner; includes dry-run flags and output paths. |
 | `TZ` | Timezone for logs. | Set to `Africa/Johannesburg`. |
 

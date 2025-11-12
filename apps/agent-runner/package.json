@@ -8,18 +8,15 @@
   },
   "scripts": {
     "dev": "tsx src/index.ts",
-  "build": "tsup src/index.ts --format esm --splitting false",
+    "build": "tsup src/index.ts --format esm --splitting false",
     "start": "tsx src/index.ts"
   },
   "dependencies": {
     "@n00t/capability-ir": "workspace:*",
     "@n00t/discovery": "workspace:*",
-    "chalk": "^5.4.1",
-    "dotenv": "^17.0.0"
+    "chalk": "^5.6.2",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
-    "tsup": "^8.3.0",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
   }
 }

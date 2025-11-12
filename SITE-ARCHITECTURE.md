@@ -1,4 +1,4 @@
-# n00ton – Site / App Architecture
+# n00t – Site / App Architecture
 
 ## 1. App surfaces
 1. **Web (Next.js 16)**
@@ -19,7 +19,7 @@ User → Next.js chat → orchestrator API → MCP host → chosen capability
 ↘ UI listens to WebSocket for stream/log updates.
 
 ## 3. Embeddability
-The chat UI is bundled as a React component (`<N00tonChat />`) in `packages/ui/` so it can be embedded in other projects.
+The chat UI is bundled as a React component (`<n00tChat />`) in `packages/ui/` so it can be embedded in other projects.
 
 ## 4. Tech stack
 - Next.js 16 (React 19) for front-end. 
