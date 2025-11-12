@@ -8,13 +8,13 @@
     "packages/*"
   ],
   "scripts": {
-  "lint": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present lint",
-  "test": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present test && vitest run",
-  "build": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present build"
+    "lint": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present lint",
+    "test": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present test && vitest run",
+    "build": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present build"
   },
   "devDependencies": {
     "@types/react": "19.2.3",
-    "@types/react-dom": "19.2.2",
+    "@types/react-dom": "19.2.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   }
