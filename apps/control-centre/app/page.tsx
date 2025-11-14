@@ -1,4 +1,4 @@
-import { n00tControlCentre } from "@n00t/ui";
+import { n00tControlCentre as N00tControlCentre } from "@n00t/ui";
 
 export default function Home() {
   return (
@@ -8,7 +8,8 @@ export default function Home() {
         display: "flex",
         alignItems: "stretch",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #eef2ff 0%, #f8fafc 60%, #e0f2fe 100%)",
+        background:
+          "linear-gradient(135deg, #eef2ff 0%, #f8fafc 60%, #e0f2fe 100%)",
         padding: "32px",
       }}
     >
@@ -18,7 +19,7 @@ export default function Home() {
           maxWidth: "1280px",
         }}
       >
-        <n00tControlCentre />
+        <N00tControlCentre />
       </div>
     </main>
   );

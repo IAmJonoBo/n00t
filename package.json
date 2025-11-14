@@ -2,7 +2,7 @@
   "name": "n00t",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "pnpm@10.21.0",
+  "packageManager": "pnpm@10.22.0",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -13,7 +13,7 @@
     "build": "pnpm -r --filter '!n00t' --workspace-root=false --workspace-concurrency=1 --if-present build"
   },
   "devDependencies": {
-    "@types/react": "19.2.3",
+    "@types/react": "19.2.4",
     "@types/react-dom": "19.2.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"

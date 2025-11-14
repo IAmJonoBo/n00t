@@ -21,7 +21,7 @@ This is aligned with current conversational UI guidance (progressive disclosure,
 2. Core user flows
 	1.	Ask → Plan → Approve → Run → Explain
 	•	User: “n00t, run the full test suite.”
-	•	Widget shows: “I found 3 ways to do tests: pnpm test, npm run test, MCP: repo-test.”
+	•	Widget shows: “I found 3 ways to do tests: pnpm test, pnpm run test, MCP: repo-test.”
 	•	User picks or confirms.
 	•	Execution streams logs in-line.
 	•	Post-run summary + “promote to shortcut”.
