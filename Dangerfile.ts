@@ -1,6 +1,8 @@
 import { danger, warn, message } from "danger";
 
-const mdChanged: string[] = danger.git.modified_files.filter((f: string) => f.endsWith(".adoc") || f.endsWith(".md"));
+const mdChanged: string[] = danger.git.modified_files.filter(
+  (f: string) => f.endsWith(".adoc") || f.endsWith(".md"),
+);
 
 async function checkReviewDates() {
   if (mdChanged.length) {

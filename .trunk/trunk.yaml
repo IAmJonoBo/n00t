@@ -7,7 +7,7 @@ cli:
 plugins:
   sources:
     - id: trunk
-      ref: v1.7.3
+      ref: v1.7.4
       uri: https://github.com/trunk-io/plugins
 # Many linters and tools depend on runtimes - configure them here. (https://docs.trunk.io/runtimes)
 runtimes:
@@ -26,19 +26,42 @@ lint:
     - golangci-lint2@2.6.1
     - actionlint@1.7.8
     - bandit@1.8.6
-    - checkov@3.2.492
+    - checkov@3.2.493
     - git-diff-check
     - markdownlint-cli2@0.18.1
     - eslint@9.39.1
     - osv-scanner@2.2.4
     - prettier@3.6.2
-    - renovate@42.5.4
+    - renovate@42.8.1
     - ruff@0.14.4
     - shellcheck@0.11.0
     - shfmt@3.12.0
     - taplo@0.10.0
-    - trufflehog@3.90.13
+    - trufflehog@3.91.0
     - yamllint@1.37.1
+    - biome-lint
+    - antora-validate
+  # Lint definitions are centralized in n00-cortex/data/trunk/base/.trunk/trunk.yaml
+  definitions:
+    - name: biome-lint
+      batch: true
+      commands:
+        - name: lint
+          run: |
+            # Use workspace Biome to avoid per-repo installs
+            pnpm -w exec biome check --reporter compact .
+          output: pass_fail
+          success_codes: [0, 1]
+    - name: antora-validate
+      batch: true
+      commands:
+        - name: lint
+          run: |
+            # Prefer N00plicate sibling Antora; fallback to workspace Antora if available
+            pnpm -C ../n00plicate exec antora --log-failure-level=error --asciidoc-sourcemap antora-playbook.yml || \
+            pnpm -w exec antora --log-failure-level=error --asciidoc-sourcemap antora-playbook.yml
+          output: pass_fail
+          success_codes: [0, 1]
   disabled:
     - markdownlint # Replaced with markdownlint-cli2
 actions:
