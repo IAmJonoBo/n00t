@@ -1,0 +1,13 @@
+= Start Here
+:page-tags: diataxis:howto, domain:platform, audience:contrib, stability:beta
+:reviewed: 2025-11-12
+
+Need the original onboarding guide? The legacy Markdown lives at
+`n00t/START HERE/README.md` inside this repository. Use the link below to open it
+from the rendered site while we continue migrating its content into Antora:
+
+* xref:++START HERE/README.md++[Open the legacy START HERE README]
+
+As migrations land, this page will be replaced with native AsciiDoc that mirrors
+the same structure (capabilities overview, MCP wiring, credential bundles, and
+handover checklists).
