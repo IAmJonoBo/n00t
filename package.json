@@ -2,7 +2,7 @@
   "name": "n00t",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "pnpm@10.21.0",
+  "packageManager": "pnpm@10.24.0",
   "workspaces": [
     "apps/*",
     "packages/*"
